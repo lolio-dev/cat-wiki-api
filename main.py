@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from server.app.routers import breeds
+from app.routers import breeds
 
 app = FastAPI()
 
