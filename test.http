@@ -1,0 +1,14 @@
+GET localhost:8000/breeds/ping
+
+###
+POST localhost:8000/breeds/amis/counter
+Content-Type: application/json
+
+###
+GET localhost:8000/breeds/names
+
+###
+GET localhost:8000/breeds/abys
+
+###
+GET localhost:8000/breeds/popular?limit=45
