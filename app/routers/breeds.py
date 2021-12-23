@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from bson import ObjectId, json_util
 from fastapi import APIRouter
 from dotenv import load_dotenv
@@ -57,13 +59,13 @@ def get_all_info_from_one_breeds(breed_id: str) -> Union[None, dict]:
     :param breed_id: L'id du chat dont l'on veut récupérer ses info
     :return: le resultat de la requete à l'api
     """
-    url = f'https://api.thecatapi.com/v1/breeds/search?q={breed_id}'
+    url = f'https://api.thecatapi.com/v1/images/search?breed_id={breed_id}'
     res = requests.get(url)
 
     if not res.ok:
         return
 
-    return res.json()[0]
+    return res.json()[0]['breeds'][0]
 
 
 def get_one_image(image_id: str) -> Union[None, str]:
@@ -138,7 +140,19 @@ async def get_popular_breeds_info(limit: int = 4):
     ).json()
 
     raw_breeds = res['documents'][:limit]
-    breeds = [breed.get('breed_id') for breed in raw_breeds]
+
+    breeds = []
+
+    for breed in raw_breeds:
+        breed_id = breed.get('breed_id')
+        breed_info = get_all_info_from_one_breeds(breed_id)
+
+        breeds.append({
+            'breed_id': breed_id,
+            'description': breed_info.get('description'),
+            'name': breed_info.get('breeds'),
+            'image': get_one_image(breed_info.get('reference_image_id'))
+        })
 
     return breeds
 
@@ -155,8 +169,8 @@ async def get_breed_info(breed_id):
         'origin': raw_breed.get('origin'),
         'lifeSpan': raw_breed.get('life_span'),
         'adaptability': raw_breed.get('adaptability'),
-        'affection': raw_breed.get('affection'),
-        'childFriendly': raw_breed.get('childFriendly'),
+        'affection': raw_breed.get('affection_level'),
+        'childFriendly': raw_breed.get('child_friendly'),
         'grooming': raw_breed.get('grooming'),
         'intelligence': raw_breed.get('intelligence'),
         'healhIssues': raw_breed.get('health_issues'),
@@ -223,4 +237,4 @@ async def increase_breed_counter(breed_id):
 
 
 if __name__ == '__main__':
-    pass
+    pprint(requests.get('https://api.thecatapi.com/v1/images/search?breed_id=amis').json()[0])
