@@ -1,11 +1,10 @@
 from fastapi import FastAPI
-
-from .app.routers import breeds
+from .app.routers.breeds import router
 
 app = FastAPI()
 
 app.include_router(
-    breeds.router,
+    router=router,
     prefix='/breeds',
     tags=['breeds'],
     responses={
