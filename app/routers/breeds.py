@@ -163,6 +163,7 @@ async def get_breed_info(breed_id):
     image_id = raw_breed.get('reference_image_id')
 
     breed = {
+        'id': raw_breed.get('id'),
         'name': raw_breed.get('name'),
         'description': raw_breed.get('description'),
         'temparament': raw_breed.get('temperament'),
