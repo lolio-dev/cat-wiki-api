@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from bson import ObjectId, json_util
 from fastapi import APIRouter
 from dotenv import load_dotenv
@@ -150,7 +148,7 @@ async def get_popular_breeds_info(limit: int = 4):
         breeds.append({
             'breed_id': breed_id,
             'description': breed_info.get('description'),
-            'name': breed_info.get('breeds'),
+            'name': breed_info.get('name'),
             'image': get_one_image(breed_info.get('reference_image_id'))
         })
 
@@ -240,4 +238,4 @@ async def increase_breed_counter(breed_id):
 
 
 if __name__ == '__main__':
-    pprint(requests.get('https://api.thecatapi.com/v1/images/search?breed_id=amis').json()[0])
+    pass
